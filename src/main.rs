@@ -20,8 +20,10 @@ use bevy_rapier2d::na::{Isometry, Isometry2};
 mod map;
 mod player;
 mod view;
+mod input;
 
 fn main() {
+
     let mut app = App::build();
     app.add_plugins(DefaultPlugins);
 
@@ -31,16 +33,15 @@ fn main() {
         .add_plugin(RapierRenderPlugin);
 
 
-    app.add_startup_system(setup_cameras.system())
+    app.add_startup_system(view::setup_cameras.system())
         .add_startup_system(map::setup_game_map.system())
-        .add_startup_system(player::setup_game_player())
+        .add_startup_system(player::setup_game_player.system())
         .add_startup_system(view::setup_materials.system())
         .add_startup_stage("game_setup", SystemStage::single(view::draw_view.system()))
+        .add_system(view::update_view.system())
+        .add_system(input::input_system.system())
         .run();
 }
 
-fn setup_cameras(commands: &mut Commands,) {
-    commands // cameras
-        .spawn(Camera2dBundle::default())
-        .spawn(CameraUiBundle::default());
-}
+
+
