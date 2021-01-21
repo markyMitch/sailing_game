@@ -16,11 +16,14 @@ use bevy_rapier2d::rapier::{
 };
 use rapier2d::dynamics::RigidBody;
 use bevy_rapier2d::na::{Isometry, Isometry2};
+use crate::ui::setup_ui;
 
 mod map;
 mod player;
 mod view;
 mod input;
+mod map_loader;
+mod ui;
 
 fn main() {
 
@@ -34,9 +37,10 @@ fn main() {
 
 
     app.add_startup_system(view::setup_cameras.system())
-        .add_startup_system(map::setup_game_map.system())
+        .add_startup_system(map_loader::setup_game_map.system())
         .add_startup_system(player::setup_game_player.system())
         .add_startup_system(view::setup_materials.system())
+        .add_startup_system(setup_ui.system())
         .add_startup_stage("game_setup", SystemStage::single(view::draw_view.system()))
         .add_system(view::update_view.system())
         .add_system(input::input_system.system())

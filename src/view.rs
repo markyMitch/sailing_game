@@ -6,12 +6,13 @@ use crate::map::{TileType, GameMap};
 use crate::player::Player;
 
 pub struct MainCamera;
+pub struct UiCamera;
 pub struct PlayerSprite;
 
 pub fn setup_cameras(commands: &mut Commands,) {
     commands // cameras
         .spawn(Camera2dBundle::default()).with(MainCamera)
-        .spawn(CameraUiBundle::default());
+        .spawn(CameraUiBundle::default()).with(UiCamera);
 }
 
 pub struct TileMaterials {
@@ -50,15 +51,16 @@ pub fn get_tile_material(tile: &TileType, materials: &Res<TileMaterials>) -> Han
 pub fn draw_view(commands: &mut Commands, windows: Res<Windows>, tile_materials: Res<TileMaterials>,
                  map: Res<GameMap>, player: Res<Player>, world_materials: Res<WorldMaterials>)
 {
-    const TILES_ON_SCREEN : u32 = 40;
+    const TILES_ON_SCREEN : u32 = 20;
     let window = windows.get_primary().unwrap();
-
+    println!("tiles in map {}", map.get_tiles().len());
     /*
     We need to work out how many squares we can fit on to the window. An easy way to do this for now
     will be to find which dimension is shorter and scale off that
      */
     let shorter_side = window.width().min(window.height());
     let tile_height = shorter_side / TILES_ON_SCREEN as f32;
+    println!("Tile height: {}", tile_height);
     let tiles_high: usize = (window.height() / tile_height) as usize;
     let tiles_wide: usize = (window.width() / tile_height) as usize;
 
@@ -72,6 +74,7 @@ pub fn draw_view(commands: &mut Commands, windows: Res<Windows>, tile_materials:
             };
             tile_sb.transform.translation = Vec3 {x: tile_height * (x_coord as f32), y: tile_height * (y_coord as f32), z:0f32 };
             commands.spawn(tile_sb);
+            println!("Tile spawned");
         }
     }
 
@@ -88,7 +91,7 @@ pub fn draw_view(commands: &mut Commands, windows: Res<Windows>, tile_materials:
 pub fn update_view(windows: Res<Windows>, mut camera_query: Query<(&mut MainCamera, &mut Transform)>,
                    mut player_query: Query<(&mut PlayerSprite, &mut Transform)>,
                    player: ResMut<Player>) {
-    const TILES_ON_SCREEN : u32 = 40;
+    const TILES_ON_SCREEN : u32 = 20;
     let window = windows.get_primary().unwrap();
     let shorter_side = window.width().min(window.height());
     let tile_height = shorter_side / TILES_ON_SCREEN as f32;

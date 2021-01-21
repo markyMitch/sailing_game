@@ -17,7 +17,7 @@ pub struct Player {
 impl Player {
     fn new() -> Player {
         // TODO use actual bevy vecs here
-        Player{x_pos: 100, y_pos: 100, direction: Direction::North}
+        Player{x_pos: 20, y_pos: 20, direction: Direction::North}
     }
 }
 
