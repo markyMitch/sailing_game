@@ -5,13 +5,14 @@ pub enum TileType {
     Ocean,
     Land,
     Beach,
+    Trees,
 }
 
 
 
 pub struct GameMap {
-
-    tiles: Vec<TileType>
+    tiles: Vec<TileType>,
+    pub total_resource_tiles: u32
 }
 
 impl GameMap {
@@ -23,11 +24,18 @@ impl GameMap {
         for _ in 0..(GameMap::WIDTH * GameMap::HEIGHT) {
             vector.push(TileType::Ocean);
         }
-        GameMap {tiles: vector}
+        GameMap {tiles: vector, total_resource_tiles: 0u32}
     }
 
     pub fn from_tiles(tiles: Vec<TileType>) -> GameMap {
-        GameMap{tiles }
+        let num_resources = tiles.iter().filter(|&tile| {
+            match tile {
+                TileType::Trees => true,
+                _ => false
+            }
+        }).count();
+
+        GameMap{tiles: tiles, total_resource_tiles: num_resources as u32 }
     }
 
     pub fn get_tile(&self, x: u32, y: u32) -> &TileType {

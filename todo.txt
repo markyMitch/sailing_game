@@ -1,0 +1,12 @@
+Handling char movement logic
+Updating UI
+Setting Main game to be offset against UI
+
+
+Player movement resolution
+Get input -> Calc whether they can do what they are trying to do -> Move the player
+
+Need to work out a sensible order of resolving events
+
+Add fonts to web build
+Work out how to set pixel size for screen so that web build renders nicely
